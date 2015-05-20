@@ -14,32 +14,12 @@ class GameScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        
-        var birdTexture = SKTexture( imageNamed: "img/flappy1.png" )
-        var birdTexture2 = SKTexture( imageNamed: "img/flappy2.png" )
-        
-        var animation = SKAction.animateWithTextures ( [birdTexture, birdTexture2], timePerFrame: 0.1 )
-        var makePlayerAnimate = SKAction.repeatActionForever( animation )
-        
-        
-        bird = SKSpriteNode( texture: birdTexture )
-        bird.position = CGPoint( x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) )
-        bird.runAction( makePlayerAnimate )
-        
-        //physics time!
-        bird.physicsBody = SKPhysicsBody( circleOfRadius: bird.size.height/2 )
-        bird.physicsBody?.allowsRotation = false
-        bird.physicsBody?.dynamic = true
-
+       
+        self.createBird()
         
         self.addChild( bird )
         
-        
-        var ground = SKNode()
-        ground.position = CGPointMake(0,0)
-        ground.physicsBody = SKPhysicsBody( rectangleOfSize: CGSizeMake( self.frame.size.width, 1) )
-        ground.physicsBody?.dynamic = false
-        self.addChild( ground )
+        self.createGround()
         
         
       
@@ -57,5 +37,33 @@ class GameScene: SKScene {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+    }
+    
+    func createBird(){
+    
+        var birdTexture = SKTexture( imageNamed: "img/flappy1.png" )
+        var birdTexture2 = SKTexture( imageNamed: "img/flappy2.png" )
+        
+        var animation = SKAction.animateWithTextures ( [birdTexture, birdTexture2], timePerFrame: 0.1 )
+        var makePlayerAnimate = SKAction.repeatActionForever( animation )
+        
+        
+        bird = SKSpriteNode( texture: birdTexture )
+        bird.position = CGPoint( x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) )
+        bird.runAction( makePlayerAnimate )
+        
+        //physics time!
+        bird.physicsBody = SKPhysicsBody( circleOfRadius: bird.size.height/2 )
+        bird.physicsBody?.allowsRotation = false
+        bird.physicsBody?.dynamic = true
+
+    }
+    
+    func createGround(){
+        var ground = SKNode()
+        ground.position = CGPointMake(0,0)
+        ground.physicsBody = SKPhysicsBody( rectangleOfSize: CGSizeMake( self.frame.size.width, 1) )
+        ground.physicsBody?.dynamic = false
+        self.addChild( ground )
     }
 }

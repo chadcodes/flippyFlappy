@@ -12,7 +12,7 @@ class GameScene: SKScene {
     
     var bird = SKSpriteNode()
 //    var background = SKSpriteNode()
-    var pipeSpeed:Double = 0.1
+    var pipeSpeed:Double = 100
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -27,8 +27,9 @@ class GameScene: SKScene {
     }
     
     func beginGame(){
+        println("Frame Size: \(self.frame.height)")
         self.beginBackgroundLoop()
-//        self.makePipes()
+        self.makePipes()
     }
     
     
@@ -118,7 +119,6 @@ class GameScene: SKScene {
             backgroundSprite.zPosition = 0
             addChild( backgroundSprite )
             
-            self.makePipes()
         }
     }
     
@@ -138,7 +138,8 @@ class GameScene: SKScene {
         //create pipe1
         var pipeTexture1 = SKTexture( imageNamed: "img/pipe1.png" )
         var pipe1 = SKSpriteNode( texture: pipeTexture1 )
-        pipe1.position = CGPoint( x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + (pipe1.size.height / 2) + ( gapHeight / 2 ) + pipeOffset  )
+//        pipe1.position = CGPoint( x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + (pipe1.size.height / 2) + ( gapHeight / 2 ) + pipeOffset  )
+        pipe1.position = CGPoint( x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + (pipe1.size.height / 2) + ( gapHeight / 2 ) + pipeOffset )
         pipe1.runAction( movePipesLeft )
         
         pipe1.physicsBody = SKPhysicsBody( rectangleOfSize: pipe1.size )

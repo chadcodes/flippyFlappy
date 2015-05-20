@@ -29,8 +29,19 @@ class GameScene: SKScene {
         //physics time!
         bird.physicsBody = SKPhysicsBody( circleOfRadius: bird.size.height/2 )
         bird.physicsBody?.allowsRotation = false
+        bird.physicsBody?.dynamic = true
+
         
         self.addChild( bird )
+        
+        
+        var ground = SKNode()
+        ground.position = CGPointMake(0,0)
+        ground.physicsBody = SKPhysicsBody( rectangleOfSize: CGSizeMake( self.frame.size.width, 1) )
+        ground.physicsBody?.dynamic = false
+        self.addChild( ground )
+        
+        
       
     }
     

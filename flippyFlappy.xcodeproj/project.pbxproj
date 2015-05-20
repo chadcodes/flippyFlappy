@@ -15,6 +15,7 @@
 		637FABC81B0CCF5C000C97E8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 637FABC71B0CCF5C000C97E8 /* Images.xcassets */; };
 		637FABCB1B0CCF5C000C97E8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 637FABC91B0CCF5C000C97E8 /* LaunchScreen.xib */; };
 		637FABD71B0CCF5C000C97E8 /* flippyFlappyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FABD61B0CCF5C000C97E8 /* flippyFlappyTests.swift */; };
+		637FABE11B0CD093000C97E8 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 637FABE01B0CD093000C97E8 /* Images */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		637FABD01B0CCF5C000C97E8 /* flippyFlappyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = flippyFlappyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		637FABD51B0CCF5C000C97E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		637FABD61B0CCF5C000C97E8 /* flippyFlappyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flippyFlappyTests.swift; sourceTree = "<group>"; };
+		637FABE01B0CD093000C97E8 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../../../../Downloads/Images; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 		637FABB91B0CCF5C000C97E8 /* flippyFlappy */ = {
 			isa = PBXGroup;
 			children = (
+				637FABE01B0CD093000C97E8 /* Images */,
 				637FABBC1B0CCF5C000C97E8 /* AppDelegate.swift */,
 				637FABBE1B0CCF5C000C97E8 /* GameScene.sks */,
 				637FABC01B0CCF5C000C97E8 /* GameScene.swift */,
@@ -198,6 +201,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				637FABE11B0CD093000C97E8 /* Images in Resources */,
 				637FABCB1B0CCF5C000C97E8 /* LaunchScreen.xib in Resources */,
 				637FABC81B0CCF5C000C97E8 /* Images.xcassets in Resources */,
 				637FABBF1B0CCF5C000C97E8 /* GameScene.sks in Resources */,

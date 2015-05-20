@@ -11,9 +11,8 @@ import SpriteKit
 class GameScene: SKScene {
     
     var bird = SKSpriteNode()
-    var background = SKSpriteNode()
-    var pipeSpeed:Double = 0.5
-
+//    var background = SKSpriteNode()
+    var pipeSpeed:Double = 0.1
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -29,6 +28,7 @@ class GameScene: SKScene {
     
     func beginGame(){
         self.beginBackgroundLoop()
+//        self.makePipes()
     }
     
     
@@ -115,12 +115,14 @@ class GameScene: SKScene {
             backgroundSprite.size.height = self.frame.height
             
             backgroundSprite.runAction( moveBGForever )
+            backgroundSprite.zPosition = 0
             addChild( backgroundSprite )
-    
+            
+            self.makePipes()
         }
     }
     
-    func MakePipes(){
+    func makePipes(){
         
         // create the gap height bit bigger than flappy
         let gapHeight = bird.size.height * 4.3
@@ -132,7 +134,48 @@ class GameScene: SKScene {
         var movementAmount = arc4random() & UInt32( self.frame.size.height )
         var pipeOffset = CGFloat( movementAmount ) - self.frame.size.height / 3
         
+        //create pipeset and gap
+        //create pipe1
+        var pipeTexture1 = SKTexture( imageNamed: "img/pipe1.png" )
+        var pipe1 = SKSpriteNode( texture: pipeTexture1 )
+        pipe1.position = CGPoint( x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + (pipe1.size.height / 2) + ( gapHeight / 2 ) + pipeOffset  )
+        pipe1.runAction( movePipesLeft )
+        
+        pipe1.physicsBody = SKPhysicsBody( rectangleOfSize: pipe1.size )
+        pipe1.physicsBody?.dynamic = false
+        // INSERT BITMASK HERE
+        pipe1.zPosition = 5
+        addChild( pipe1 );
+        println("Pipe 1: \(pipe1.position)")
+        
+
+        //create pipe2
+        var pipeTexture2 = SKTexture( imageNamed: "img/pipe2.png" )
+        var pipe2 = SKSpriteNode( texture: pipeTexture1 )
+        pipe2.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + (pipe2.size.height / 2) - gapHeight - (gapHeight / 2) + pipeOffset )
+        pipe2.runAction( movePipesLeft )
+        
+        pipe2.physicsBody = SKPhysicsBody( rectangleOfSize: pipe2.size )
+        pipe2.physicsBody?.dynamic = false
+        // INSERT BITMASK HERE
+        pipe2.zPosition = 5
+        addChild( pipe2 );
+        println("Pipe 2: \(pipe2.position)")
+        
         //
+        var gap = SKNode()
+        
+        gap.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + pipeOffset)
+        gap.physicsBody = SKPhysicsBody( rectangleOfSize:CGSize(width:pipe1.size.width, height:gapHeight) )
+        gap.runAction( moveAndRemove )
+        gap.physicsBody?.dynamic = false
+        // set up gap bitmasks ... category? contact? define what is supposed to happen before you work this out... I guess contact as in you get a point when you pass? fakk review tonight
+        gap.zPosition = 5
+        addChild( gap );
+        println("Gap: \(gap.position)")
+
+        
+        
 
     }
 }

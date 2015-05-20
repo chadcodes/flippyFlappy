@@ -18,11 +18,15 @@ class GameScene: SKScene {
        
         self.createBackground()
         self.createGround()
-
-        
         self.createBird()
-        self.addChild( bird )
         
+        self.addChild( bird )
+        self.beginGame()
+        
+    }
+    
+    func beginGame(){
+        self.backgroundMove()
     }
     
     
@@ -86,5 +90,17 @@ class GameScene: SKScene {
         
         
         self.addChild( background )
+    }
+    
+    func backgroundMove(){
+        var bgTextureWidth = background.texture?.size().width
+        println("BG width: \(bgTextureWidth)")
+
+        var moveBG = SKAction.moveByX( -(bgTextureWidth!), y: 0, duration: 2)
+        
+        var replace = SKAction.moveByX(bgTextureWidth!, y:0, duration: 0)
+        
+        var moveBGForever =  SKAction.repeatActionForever( SKAction.sequence([moveBG, replace]) )
+        
     }
 }

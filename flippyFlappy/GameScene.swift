@@ -15,8 +15,8 @@ class GameScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-       
-        self.createBackground()
+        println("check check 1 2 3 ")
+
         self.createGround()
         self.createBird()
         
@@ -26,7 +26,7 @@ class GameScene: SKScene {
     }
     
     func beginGame(){
-        self.backgroundMove()
+        self.beginBackgroundLoop()
     }
     
     
@@ -81,19 +81,20 @@ class GameScene: SKScene {
         self.addChild( ground )
     }
     
-    func createBackground(){
-        var backgroundTexture = SKTexture( imageNamed: "img/bg.png" )
-        background = SKSpriteNode( texture: backgroundTexture )
-        background.position = CGPoint( x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) )
-        background.size.height = self.frame.height
-        background.zPosition = 0
-        
-        
-        self.addChild( background )
-    }
+//    func createBackground(){
+//        var backgroundTexture = SKTexture( imageNamed: "img/bg.png" )
+//        background = SKSpriteNode( texture: backgroundTexture )
+//        background.position = CGPoint( x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) )
+//        background.size.height = self.frame.height
+//        background.zPosition = 0
+//        
+//        
+//        self.addChild( background )
+//    }
     
-    func backgroundMove(){
-        var bgTextureWidth = background.texture?.size().width
+    func beginBackgroundLoop(){
+        var backgroundTexture = SKTexture(imageNamed: "img/bg.png" )
+        var bgTextureWidth = backgroundTexture?.size().width
         println("BG width: \(bgTextureWidth)")
 
         var moveBG = SKAction.moveByX( -(bgTextureWidth!), y: 0, duration: 2)
@@ -102,5 +103,19 @@ class GameScene: SKScene {
         
         var moveBGForever =  SKAction.repeatActionForever( SKAction.sequence([moveBG, replace]) )
         
+        var bgCalculation = 1 + self.frame.size.width / ( bgTextureWidth! * 2 )
+        
+        for var i:CGFloat = 0; i < 3 ; i++ {
+
+            var backgroundSprite = SKSpriteNode(texture: backgroundTexture )
+            
+            backgroundSprite.position = CGPoint(x: bgTextureWidth! / 2 + bgTextureWidth! * i, y:CGRectGetMidY(self.frame))
+            backgroundSprite.size.height = self.frame.height
+            
+            backgroundSprite.runAction( moveBGForever )
+            addChild( backgroundSprite )
+    
+        }
     }
+    
 }

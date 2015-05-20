@@ -22,10 +22,13 @@ class GameScene: SKScene {
         var makePlayerAnimate = SKAction.repeatActionForever( animation )
         
         
-        
         bird = SKSpriteNode( texture: birdTexture )
         bird.position = CGPoint( x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) )
         bird.runAction( makePlayerAnimate )
+        
+        //physics time!
+        bird.physicsBody = SKPhysicsBody( circleOfRadius: bird.size.height/2 )
+        bird.physicsBody?.allowsRotation = false
         
         self.addChild( bird )
       

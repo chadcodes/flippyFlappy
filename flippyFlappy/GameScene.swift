@@ -17,14 +17,12 @@ class GameScene: SKScene {
         /* Setup your scene here */
        
         self.createBackground()
-        self.createBird()
+        self.createGround()
+
         
+        self.createBird()
         self.addChild( bird )
         
-        self.createGround()
-        
-        
-      
     }
     
     
@@ -67,6 +65,7 @@ class GameScene: SKScene {
         bird.physicsBody = SKPhysicsBody( circleOfRadius: bird.size.height/2 )
         bird.physicsBody?.allowsRotation = false
         bird.physicsBody?.dynamic = true
+        bird.zPosition = 10
 
     }
     
@@ -83,6 +82,8 @@ class GameScene: SKScene {
         background = SKSpriteNode( texture: backgroundTexture )
         background.position = CGPoint( x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) )
         background.size.height = self.frame.height
+        background.zPosition = 0
+        
         
         self.addChild( background )
     }

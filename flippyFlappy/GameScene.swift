@@ -16,9 +16,16 @@ class GameScene: SKScene {
         /* Setup your scene here */
         
         var birdTexture = SKTexture( imageNamed: "img/flappy1.png" )
+        var birdTexture2 = SKTexture( imageNamed: "img/flappy2.png" )
+        
+        var animation = SKAction.animateWithTextures ( [birdTexture, birdTexture2], timePerFrame: 0.1 )
+        var makePlayerAnimate = SKAction.repeatActionForever( animation )
+        
+        
         
         bird = SKSpriteNode( texture: birdTexture )
         bird.position = CGPoint( x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) )
+        bird.runAction( makePlayerAnimate )
         
         self.addChild( bird )
       

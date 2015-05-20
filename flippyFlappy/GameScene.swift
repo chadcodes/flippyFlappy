@@ -12,6 +12,8 @@ class GameScene: SKScene {
     
     var bird = SKSpriteNode()
     var background = SKSpriteNode()
+    var pipeSpeed:Double = 0.5
+
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -118,4 +120,19 @@ class GameScene: SKScene {
         }
     }
     
+    func MakePipes(){
+        
+        // create the gap height bit bigger than flappy
+        let gapHeight = bird.size.height * 4.3
+        
+        // move pipes
+        var movePipesLeft = SKAction.moveByX(-self.frame.size.width * 2, y: 0, duration: NSTimeInterval(self.frame.width / CGFloat(pipeSpeed)))
+        var removePipe = SKAction.removeFromParent()
+        var moveAndRemove = SKAction.sequence( [movePipesLeft, removePipe] )
+        var movementAmount = arc4random() & UInt32( self.frame.size.height )
+        var pipeOffset = CGFloat( movementAmount ) - self.frame.size.height / 3
+        
+        //
+
+    }
 }

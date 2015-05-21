@@ -14,11 +14,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerCategory   : UInt32 = 0x1 << 0 // 00000000000000000000000000000001
     let pipeCategory : UInt32 = 0x1 << 1 // 00000000000000000000000000000010
     let gapCategory  : UInt32 = 0x1 << 2 // 00000000000000000000000000000100
+    let boundaryCategory  : UInt32 = 0x1 << 3 // 00000000000000000000000000000100
 
     
     var bird = SKSpriteNode()
     var pipeSpeed:Double = 150
+    var currentPoints:Int = 0
     
+    var ground = SKSpriteNode()
+    var ceiling = SKSpriteNode()
     
     
     override func didMoveToView(view: SKView) {
@@ -26,16 +30,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         physicsWorld.contactDelegate = self
 
-        self.createGround()
-        self.createBird()
+        self.initGameBoard()
+        self.initPlayer()
         
         self.addChild( bird )
         self.beginGame()
         
     }
     
+    func initGameBoard(){
+        let xBoundaryCoord = CGFloat( 0 )
+
+        ground = createBoundary( xBoundaryCoord, yCoord: CGFloat(10))
+        self.addChild(ground)
+        
+        ceiling = createBoundary( xBoundaryCoord, yCoord: CGFloat(self.frame.height - 10))
+        self.addChild(ceiling)
+        
+    }
+    
+    
     func beginGame(){
-        println("Frame Size: \(self.frame.height)")
+
         self.beginBackgroundLoop()
         self.makePipes()
         var timer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: Selector("makePipes"), userInfo: nil, repeats: true)
@@ -65,13 +81,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Called before each frame is rendered */
     }
     
-    func createBird(){
+    func initPlayer(){
     
-        var birdTexture = SKTexture( imageNamed: "img/flappy1.png" )
-        var birdTexture2 = SKTexture( imageNamed: "img/flappy2.png" )
+        let birdTexture = SKTexture( imageNamed: "img/flappy1.png" )
+        let birdTexture2 = SKTexture( imageNamed: "img/flappy2.png" )
         
-        var animation = SKAction.animateWithTextures ( [birdTexture, birdTexture2], timePerFrame: 0.1 )
-        var makePlayerAnimate = SKAction.repeatActionForever( animation )
+        let animation = SKAction.animateWithTextures ( [birdTexture, birdTexture2], timePerFrame: 0.1 )
+        let makePlayerAnimate = SKAction.repeatActionForever( animation )
         
         
         bird = SKSpriteNode( texture: birdTexture )
@@ -86,12 +102,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
-    func createGround(){
-        var ground = SKNode()
-        ground.position = CGPointMake(0,0)
-        ground.physicsBody = SKPhysicsBody( rectangleOfSize: CGSizeMake( self.frame.size.width, 1) )
-        ground.physicsBody?.dynamic = false
-        self.addChild( ground )
+    // Create a game boundary
+    func createBoundary(xCoord:CGFloat, yCoord:CGFloat) -> SKSpriteNode {
+        
+        // Create boundary node
+        let boundary = SKSpriteNode()
+        
+        // Define boundary position
+        boundary.position = CGPointMake(xCoord, yCoord)
+        
+        // Set boundary physics body
+        boundary.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width * 2, 1))
+        
+        // Setup collision detection
+        boundary.physicsBody?.dynamic = false
+        boundary.physicsBody?.usesPreciseCollisionDetection = true
+        boundary.physicsBody?.categoryBitMask = boundaryCategory
+        boundary.physicsBody?.collisionBitMask = boundaryCategory | playerCategory
+        boundary.physicsBody?.contactTestBitMask = boundaryCategory | playerCategory
+        
+        // Return the boundary as an object
+        return boundary
     }
     
     func beginBackgroundLoop(){
@@ -99,7 +130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var bgTextureWidth = backgroundTexture?.size().width
         println("BG width: \(bgTextureWidth)")
 
-        var moveBG = SKAction.moveByX( -(bgTextureWidth!), y: 0, duration: 2)
+        var moveBG = SKAction.moveByX( -(bgTextureWidth!), y: 0, duration: 4)
         
         var replace = SKAction.moveByX(bgTextureWidth!, y:0, duration: 0)
         
@@ -171,7 +202,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gap.runAction( moveAndRemove )
         gap.physicsBody?.dynamic = false
         gap.physicsBody?.categoryBitMask = gapCategory
-//        gap.physicsBody?.collisionBitMask = gapCategory
+        gap.physicsBody?.collisionBitMask = gapCategory
         gap.physicsBody?.contactTestBitMask = playerCategory
         gap.zPosition = 7
         self.addChild( gap );
@@ -179,5 +210,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        //create local vars for two physics bodies
+        var firstBody: SKPhysicsBody // notice currently undefined
+        var secondBody: SKPhysicsBody // notice currently undefined
+        
+        //assign two bodies so that the one with the lower category ALWAYS will be stored in var firstBody
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        //listen for contact between player and gap
+        if firstBody.categoryBitMask == playerCategory && secondBody.categoryBitMask == gapCategory{
+            
+            //on contact - instantiate add point!
+            self.currentPoints = self.currentPoints + 1
+            println("Current Points: \(self.currentPoints)")
+        }
+    }
 
 }

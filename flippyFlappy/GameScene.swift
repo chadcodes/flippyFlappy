@@ -18,8 +18,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     
     var bird = SKSpriteNode()
-    var pipeSpeed:Double = 150
-    var currentPoints:Int = 0
+    var pipeSpeed:Double = 200
+    var score:Int = 0
     
     var ground = SKSpriteNode()
     var ceiling = SKSpriteNode()
@@ -99,7 +99,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody?.allowsRotation = false
         bird.physicsBody?.dynamic = true
         bird.zPosition = 10
+        
+        //set up bird bitmasks
+        bird.physicsBody?.categoryBitMask = playerCategory
+        bird.physicsBody?.contactTestBitMask = gapCategory | pipeCategory | boundaryCategory
 
+        bird.physicsBody?.collisionBitMask = pipeCategory | boundaryCategory
+        
     }
     
     // Create a game boundary
@@ -130,7 +136,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var bgTextureWidth = backgroundTexture?.size().width
         println("BG width: \(bgTextureWidth)")
 
-        var moveBG = SKAction.moveByX( -(bgTextureWidth!), y: 0, duration: 4)
+        var moveBG = SKAction.moveByX( -(bgTextureWidth!), y: 0, duration: 2)
         
         var replace = SKAction.moveByX(bgTextureWidth!, y:0, duration: 0)
         
@@ -162,9 +168,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var removePipe = SKAction.removeFromParent()
         var moveAndRemove = SKAction.repeatActionForever(SKAction.sequence([movePipesLeft, removePipe]))
         var movementAmount = arc4random() % UInt32( self.frame.size.height/2 )
-            println("movementAmount \(movementAmount)")
+//            println("movementAmount \(movementAmount)")
         var pipeOffset = CGFloat( movementAmount ) - self.frame.size.height/4
-            println("pipeOffset \(pipeOffset)")
+//            println("pipeOffset \(pipeOffset)")
         
         // create pipe1
         var pipeTexture1 = SKTexture( imageNamed: "img/pipe1.png" )
@@ -177,7 +183,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pipe1.physicsBody?.categoryBitMask = pipeCategory
         pipe1.zPosition = 5
         self.addChild( pipe1 );
-        println("Pipe 1: \(pipe1.position)")
+//        println("Pipe 1: \(pipe1.position)")
         
 
 //        //create pipe2
@@ -192,7 +198,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pipe2.physicsBody?.categoryBitMask = pipeCategory
         pipe2.zPosition = 6
         self.addChild( pipe2 );
-        println("Pipe 2: \(pipe2.position)")
+//        println("Pipe 2: \(pipe2.position)")
 //
 //        //
         var gap = SKNode()
@@ -206,12 +212,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gap.physicsBody?.contactTestBitMask = playerCategory
         gap.zPosition = 7
         self.addChild( gap );
-        println("Gap: \(gap.position)")
+//        println("Gap: \(gap.position)")
 
+    }
+    
+    func increaseScore(){
+        score += 1
+        println("Current Score: \(self.score)")
     }
     
     
     func didBeginContact(contact: SKPhysicsContact) {
+        //begin contact between
+    }
+    
+    /* Physics End Contact */
+    // Called automatically when 2 objects end contact
+    func didEndContact(contact: SKPhysicsContact) {
+        
         //create local vars for two physics bodies
         var firstBody: SKPhysicsBody // notice currently undefined
         var secondBody: SKPhysicsBody // notice currently undefined
@@ -229,8 +247,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if firstBody.categoryBitMask == playerCategory && secondBody.categoryBitMask == gapCategory{
             
             //on contact - instantiate add point!
-            self.currentPoints = self.currentPoints + 1
-            println("Current Points: \(self.currentPoints)")
+            self.increaseScore()
         }
     }
 

@@ -24,6 +24,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var ground = SKSpriteNode()
     var ceiling = SKSpriteNode()
     
+    var scoreLabel = SKLabelNode()
+    
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -46,6 +48,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         ceiling = createBoundary( xBoundaryCoord, yCoord: CGFloat(self.frame.height - 10))
         self.addChild(ceiling)
+        
+        self.initScoreBoard()
         
     }
     
@@ -106,6 +110,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         bird.physicsBody?.collisionBitMask = pipeCategory | boundaryCategory
         
+    }
+    
+    func initScoreBoard(){
+        // score label
+        self.scoreLabel.fontName = "chalkduster"
+        self.scoreLabel.fontSize = 100
+        self.scoreLabel.position = CGPointMake(CGRectGetMidX(self.frame), self.frame.size.height / 2 + 200)
+        self.scoreLabel.zPosition = 11
+        
+        updateScoreLabelText()
+        self.addChild(scoreLabel)
+    }
+    
+    func scoreToString() -> String{
+        let scoreString = String( self.score )
+        return scoreString
+    }
+    
+    func updateScoreLabelText(){
+        self.scoreLabel.text = self.scoreToString()
     }
     
     // Create a game boundary
@@ -218,7 +242,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func increaseScore(){
         score += 1
-        println("Current Score: \(self.score)")
+        self.updateScoreLabelText()
     }
     
     
